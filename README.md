@@ -2,6 +2,12 @@
 
 > 从零开始，掌握编程。一个为完全没有编程基础的人设计的手机优先 Python 交互式学习平台。
 
+## 🌐 线上访问
+
+**https://x13502239474-oss.github.io/python-academy/**
+
+已部署到 GitHub Pages（`gh-pages` 分支），手机浏览器直接打开即可写代码、运行 Python。iPhone 用 Safari 打开后「添加到主屏幕」可当 App 用。
+
 ## 项目简介
 
 这不是电子书阅读器，也不是静态教程站。它把两本经典教材融合成一套循序渐进的课程体系，并配有一个**能真正运行 Python 的手机端代码实验室**。用户每学一个知识点，就能立刻写代码、运行、看结果。
@@ -80,12 +86,21 @@ Python 的完整开发环境在手机浏览器里有限制，本项目诚实采�
 
 ```bash
 # 1. 以仓库名为 base 构建（项目站点路径）
-VITE_BASE=/python-academy/ npm run build
+MSYS_NO_PATHCONV=1 VITE_BASE=/python-academy/ npm run build
 # 2. 把 dist/ 内容单独推到 gh-pages 分支（含自动生成的 .nojekyll）
 # 3. 仓库 Settings → Pages → Source 选 gh-pages 分支 / (root)
 ```
 
-也可通过 API 启用 Pages（见交付记录）。源码放 `main` 分支，构建产物放 `gh-pages` 分支，互不干扰。
+源码放 `main` 分支，构建产物放 `gh-pages` 分支，互不干扰。
+
+**本机 git 协议经代理不通时**，可用 REST API 部署脚本（纯 `api.github.com`，不需要 git push / workflow 权限）：
+
+```bash
+GITHUB_TOKEN=ghp_xxx node scripts/deploy-api.mjs
+# 该脚本自动把源码推到 main、dist 推到 gh-pages
+```
+
+> ⚠️ **Windows / Git Bash 用户注意**：`VITE_BASE=/python-academy/` 在 Git Bash(MSYS) 里会被自动转成 Windows 绝对路径，导致构建出的 HTML 资源路径错误、线上白屏。务必加 `MSYS_NO_PATHCONV=1`（`vite.config.ts` 里也做了兜底纠正）。
 
 ### 方式 B：GitHub Actions 自动部署（需 workflow 权限）
 
