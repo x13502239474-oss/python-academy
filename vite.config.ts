@@ -3,8 +3,12 @@ import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 
 // GitHub Pages 部署时设置 base 为仓库名；本地/CNAME 场景留空。
-// 通过环境变量 VITE_BASE 覆盖，例如：VITE_BASE=/python-academy/ npm run build
-const base = process.env.VITE_BASE || '/'
+// 通过环境变量 VITE_BASE 覆盖，例如：MSYS_NO_PATHCONV=1 VITE_BASE=/python-academy/ npm run build
+// 防护：Git Bash(MSYS) 会把 /python-academy/ 转成 Windows 绝对路径，这里自动纠正。
+let base = process.env.VITE_BASE || '/'
+if (base && /\/python-academy\/?$/.test(base) && !/^\/python-academy\/?$/.test(base)) {
+  base = '/python-academy/'
+}
 
 export default defineConfig({
   base,
