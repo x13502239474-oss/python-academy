@@ -1,0 +1,170 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+  --bg: #070d1a;
+  --surface: #0e1b33;
+  --surface-2: #12213f;
+  --line: rgba(255, 255, 255, 0.08);
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(1000px 600px at 15% -10%, rgba(55, 118, 171, 0.16), transparent 60%),
+    radial-gradient(800px 500px at 110% 10%, rgba(255, 212, 59, 0.08), transparent 55%),
+    var(--bg);
+  color: #e8eef7;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'PingFang SC', 'Microsoft YaHei', Inter, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: rgba(55, 118, 171, 0.4);
+  color: #fff;
+}
+
+/* 滚动条 */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.14);
+  border-radius: 10px;
+}
+
+@layer components {
+  .surface {
+    @apply bg-ink-850/80 border border-white/[0.07] rounded-2xl;
+    backdrop-filter: blur(14px);
+  }
+  .surface-soft {
+    @apply bg-white/[0.035] border border-white/[0.06] rounded-2xl;
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl font-medium transition active:scale-[0.97] select-none;
+  }
+  .btn-primary {
+    @apply btn bg-pyblue text-white px-4 py-2.5 shadow-lg shadow-pyblue/20 hover:bg-pyblue-light;
+  }
+  .btn-ghost {
+    @apply btn bg-white/[0.06] text-slate-200 px-4 py-2.5 hover:bg-white/[0.1] border border-white/[0.08];
+  }
+  .chip {
+    @apply inline-flex items-center gap-1 text-xs px-2.5 py-1 rounded-full border;
+  }
+  .section-title {
+    @apply text-[15px] font-semibold text-slate-100 tracking-wide;
+  }
+  .muted {
+    @apply text-slate-400;
+  }
+}
+
+/* 正文排版（课程内容） */
+.prose-py {
+  @apply text-[15px] leading-[1.85] text-slate-300;
+}
+.prose-py h1 {
+  @apply text-xl font-bold text-white mt-6 mb-3;
+}
+.prose-py h2 {
+  @apply text-[17px] font-semibold text-slate-100 mt-6 mb-2 flex items-center gap-2;
+}
+.prose-py h2::before {
+  content: '';
+  @apply block w-1 h-4 rounded-full bg-pyblue;
+}
+.prose-py p {
+  @apply my-3;
+}
+.prose-py strong {
+  @apply text-pyyellow font-semibold;
+}
+.prose-py code {
+  @apply font-mono text-[13px] px-1.5 py-0.5 rounded bg-white/[0.07] text-pyblue-light;
+}
+.prose-py pre {
+  @apply my-4 rounded-xl overflow-x-auto p-4 bg-[#060b16] border border-white/[0.08] text-[13px] leading-6 font-mono text-slate-200;
+}
+.prose-py pre code {
+  @apply bg-transparent p-0 text-inherit;
+}
+.prose-py ul,
+.prose-py ol {
+  @apply my-3 pl-5 space-y-1.5;
+}
+.prose-py ul {
+  @apply list-disc;
+}
+.prose-py ol {
+  @apply list-decimal;
+}
+.prose-py li::marker {
+  @apply text-pyblue;
+}
+.prose-py blockquote {
+  @apply my-4 pl-4 border-l-2 border-pyyellow/70 text-slate-300 italic;
+}
+.prose-py table {
+  @apply w-full my-4 text-sm border-collapse;
+}
+.prose-py th,
+.prose-py td {
+  @apply border border-white/10 px-3 py-1.5 text-left;
+}
+.prose-py th {
+  @apply bg-white/[0.05] text-slate-200 font-medium;
+}
+
+/* 代码高亮 token */
+.tok-kw { color: #c792ea; }
+.tok-str { color: #c3e88d; }
+.tok-num { color: #f78c6c; }
+.tok-com { color: #546e7a; font-style: italic; }
+.tok-fn { color: #82aaff; }
+.tok-op { color: #89ddff; }
+
+/* 底部导航安全区 */
+.safe-bottom {
+  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 4px);
+}
+.safe-top {
+  padding-top: env(safe-area-inset-top, 0px);
+}
+
+/* 编辑器 */
+.code-editor {
+  font-family: 'SF Mono', 'JetBrains Mono', Menlo, Consolas, monospace;
+  tab-size: 4;
+}
+
+/* 动画 */
+@keyframes floaty {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+.animate-floaty { animation: floaty 5s ease-in-out infinite; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-up { animation: fadeUp .35s ease-out both; }

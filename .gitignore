@@ -1,0 +1,12 @@
+node_modules
+dist
+# Pyodide 运行时由 npm run build/dev 时从 npm 包自动复制到 public/pyodide/
+public/pyodide/
+.DS_Store
+*.local
+.vite
+_dev-dist
+coverage
+
+# 本次部署采用 gh-pages 分支静态部署；Actions 工作流保留供将来有 workflow 权限时使用
+.github/workflows/deploy.yml
