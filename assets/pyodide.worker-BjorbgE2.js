@@ -1,4 +1,4 @@
-const o="/Users/1/AppData/Local/Programs/WorkBuddy/resources/vendor/PortableGit/python-academy/",_=`${o.endsWith("/")?o:o+"/"}pyodide/`;let a=null,r=null;function u(){return a?Promise.resolve(a):r||(r=(async()=>{try{const s=await(await import(`${_}pyodide.mjs`)).loadPyodide({indexURL:_});return a=s,self.postMessage({type:"ready"}),s}catch(t){throw self.postMessage({type:"load-error",message:String(t?.message||t)}),t}})(),r)}u().catch(()=>{});self.onmessage=async t=>{const{type:s,code:d,jobId:n,timeoutMs:l}=t.data;if(s==="run")try{const e=await u();e.globals.set("__pa_deadline",(Date.now()+l)/1e3);const p=`
+const n="/python-academy/",_=`${n.endsWith("/")?n:n+"/"}pyodide/`;let o=null,r=null;function u(){return o?Promise.resolve(o):r||(r=(async()=>{try{const s=await(await import(`${_}pyodide.mjs`)).loadPyodide({indexURL:_});return o=s,self.postMessage({type:"ready"}),s}catch(t){throw self.postMessage({type:"load-error",message:String(t?.message||t)}),t}})(),r)}u().catch(()=>{});self.onmessage=async t=>{const{type:s,code:d,jobId:a,timeoutMs:l}=t.data;if(s==="run")try{const e=await u();e.globals.set("__pa_deadline",(Date.now()+l)/1e3);const p=`
 import sys, io, time, traceback
 
 _out = io.StringIO()
@@ -32,4 +32,4 @@ finally:
     sys.stderr = sys.__stderr__
 
 (_out.getvalue(), _err.getvalue())
-`,i=await e.runPythonAsync(p),c=i.get(0)??"",y=i.get(1)??"";i.destroy(),self.postMessage({type:"result",jobId:n,stdout:String(c),stderr:String(y)})}catch(e){self.postMessage({type:"result",jobId:n,stdout:"",stderr:String(e?.message||e)})}};
+`,i=await e.runPythonAsync(p),c=i.get(0)??"",y=i.get(1)??"";i.destroy(),self.postMessage({type:"result",jobId:a,stdout:String(c),stderr:String(y)})}catch(e){self.postMessage({type:"result",jobId:a,stdout:"",stderr:String(e?.message||e)})}};
