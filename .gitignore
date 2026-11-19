@@ -1,5 +1,7 @@
 node_modules
 dist
+tmp/
+*.tsbuildinfo
 # Pyodide 运行时由 npm run build/dev 时从 npm 包自动复制到 public/pyodide/
 public/pyodide/
 .DS_Store

@@ -147,6 +147,8 @@ async function main() {
     rel === '.git' || rel.startsWith('.git/') ||
     rel === 'node_modules' || rel.startsWith('node_modules/') ||
     rel === 'dist' || rel.startsWith('dist/') ||
+    rel === 'tmp' || rel.startsWith('tmp/') ||
+    rel === 'tsconfig.tsbuildinfo' || rel.endsWith('.tsbuildinfo') ||
     rel.startsWith('public/pyodide/') ||
     rel.startsWith('.github/workflows/') ||
     rel === '.DS_Store'
