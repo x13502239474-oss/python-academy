@@ -20,6 +20,12 @@ function parseBoolean(s: string): boolean | null {
 /**
  * 通用判题引擎。program 题需要外部传入运行结果（runCode），其余题型本地判分。
  */
+
+/** 无论对错都附上详细解析：练习的价值在解析，不在分数 */
+function explain(head: string, q: Question): string {
+  return q.explanation ? `${head}\n\n${q.explanation}` : head
+}
+
 export function judge(q: Question, userAnswer: string, programOutput?: string): JudgeResult {
   const qtype = q.qtype
 
@@ -44,9 +50,12 @@ export function judge(q: Question, userAnswer: string, programOutput?: string): 
     return {
       correct: score >= 0.999,
       score,
-      feedback: score >= 0.999
-        ? `太棒了！全部 ${cases.length} 个测试用例通过。`
-        : `通过了 ${passed}/${cases.length} 个测试用例。${details.join('；')}`,
+      feedback: explain(
+        score >= 0.999
+          ? `太棒了！全部 ${cases.length} 个测试用例通过。`
+          : `通过了 ${passed}/${cases.length} 个测试用例。${details.join('；')}`,
+        q,
+      ),
     }
   }
 
@@ -55,28 +64,28 @@ export function judge(q: Question, userAnswer: string, programOutput?: string): 
     const correct = normalize(String(q.answer))
     const accepted = (q.accepted || []).map(normalize)
     const ok = a === correct || accepted.includes(a)
-    return { correct: ok, score: ok ? 1 : 0, feedback: ok ? '回答正确。' : `正确答案是 ${String(q.answer)}。${q.explanation}` }
+    return { correct: ok, score: ok ? 1 : 0, feedback: explain(ok ? '回答正确。' : `正确答案是 ${String(q.answer)}。`, q) }
   }
 
   if (qtype === 'multiple') {
     const expected = (Array.isArray(q.answer) ? q.answer : [q.answer]).filter((v): v is string => typeof v === 'string').map(normalize).sort()
     const got = userAnswer.split(/[,，;；\s]+/).map(normalize).filter(Boolean).sort()
     const ok = expected.length === got.length && expected.every((v, i) => v === got[i])
-    return { correct: ok, score: ok ? 1 : 0, feedback: ok ? '回答正确。' : `正确答案是 ${(Array.isArray(q.answer) ? q.answer : [q.answer]).join('、')}。${q.explanation}` }
+    return { correct: ok, score: ok ? 1 : 0, feedback: explain(ok ? '回答正确。' : `正确答案是 ${(Array.isArray(q.answer) ? q.answer : [q.answer]).join('、')}。`, q) }
   }
 
   if (qtype === 'boolean') {
     const got = parseBoolean(userAnswer)
     const expect = parseBoolean(String(q.answer))
     const ok = got !== null && got === expect
-    return { correct: ok, score: ok ? 1 : 0, feedback: ok ? '判断正确。' : `正确答案：${expect ? '对' : '错'}。${q.explanation}` }
+    return { correct: ok, score: ok ? 1 : 0, feedback: explain(ok ? '判断正确。' : `正确答案：${expect ? '对' : '错'}。`, q) }
   }
 
   if (qtype === 'blank') {
     const a = normalize(userAnswer)
     const accepted = [normalize(String(q.answer)), ...(q.accepted || []).map(normalize)]
     const ok = accepted.includes(a)
-    return { correct: ok, score: ok ? 1 : 0, feedback: ok ? '填写正确。' : `参考答案：${String(q.answer)}。${q.explanation}` }
+    return { correct: ok, score: ok ? 1 : 0, feedback: explain(ok ? '填写正确。' : `参考答案：${String(q.answer)}。`, q) }
   }
 
   if (qtype === 'code-complete' || qtype === 'predict' || qtype === 'debug') {
@@ -97,9 +106,12 @@ export function judge(q: Question, userAnswer: string, programOutput?: string): 
       score,
       hitPoints: hit,
       missedPoints: missed,
-      feedback: ok
-        ? `回答正确，命中 ${hit.length}/${groups.length} 个要点。`
-        : `命中 ${hit.length}/${groups.length} 个要点，还差：${missed.join('、')}。${q.explanation}`,
+      feedback: explain(
+        ok
+          ? `回答正确，命中 ${hit.length}/${groups.length} 个要点。`
+          : `命中 ${hit.length}/${groups.length} 个要点，还差：${missed.join('、')}。`,
+        q,
+      ),
     }
   }
 

@@ -11,10 +11,16 @@ export interface SourceRef {
 
 export interface CodeExample {
   title: string
+  /** 为什么看这个例子（一句话点明这段代码要解决什么） */
+  intro?: string
   code: string
   /** 逐行解释：行号 -> 说明 */
   lines?: { code: string; explain: string }[]
+  /** 程序运行过程：第几步做了什么、此刻变量/内存里是什么状态 */
+  trace?: { step: string; state: string }[]
   expectedOutput?: string
+  /** 试一下：让学习者动手改动的地方 */
+  tryIt?: string
 }
 
 export interface CompareItem {
@@ -77,6 +83,10 @@ export interface Lesson {
   visual?: VisualSpec
   /** 常见错误 */
   pitfalls?: string[]
+  /** 术语表：术语 -> 大白话解释（零基础必看） */
+  terms?: { term: string; plain: string }[]
+  /** 本课小结（3-6 条） */
+  keyPoints?: string[]
   /** 来源标注 */
   sources: SourceRef[]
   /** 必须先掌握的知识点 id */

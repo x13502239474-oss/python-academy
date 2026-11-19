@@ -38,15 +38,21 @@ try {
   await page.goto(BASE + '#/courses', { waitUntil: 'networkidle' })
   await page.waitForTimeout(500)
   const stageCount = await page.getByText(/阶段 \d/).count()
-  check('课程页 8 阶段', stageCount >= 8, `阶段元素=${stageCount}`)
+  check('课程页 9 阶段', stageCount >= 9, `阶段元素=${stageCount}`)
 
   // 4. 课程详情页 + 示例代码
-  await page.goto(BASE + '#/lesson/s1-06', { waitUntil: 'networkidle' })
-  await page.waitForTimeout(500)
+  await page.goto(BASE + '#/lesson/s1-07', { waitUntil: 'networkidle' })
+  await page.waitForTimeout(600)
   const detailTitle = await page.locator('h1').first().textContent()
-  check('课程详情页', !!detailTitle && detailTitle.includes('print'), `标题=${detailTitle}`)
+  check('课程详情页', !!detailTitle && detailTitle.includes('程序'), `标题=${detailTitle}`)
   const hasCode = await page.locator('pre code').count()
   check('课程代码示例渲染', hasCode > 0, `代码块=${hasCode}`)
+  // 深度教学区块：术语大白话 / 逐行解析 / 程序运行过程 / 本课小结
+  const bodyText = await page.locator('body').innerText()
+  check('术语大白话区块', bodyText.includes('术语翻译成大白话'))
+  check('逐行代码解析区块', bodyText.includes('逐行代码解析'))
+  check('程序运行过程区块', bodyText.includes('程序运行过程'))
+  check('本课小结区块', bodyText.includes('本课小结'))
 
   // 5. 实验室：Pyodide 真实运行
   await page.goto(BASE + '#/lab', { waitUntil: 'domcontentloaded' })

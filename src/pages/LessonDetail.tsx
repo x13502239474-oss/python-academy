@@ -11,6 +11,7 @@ import { Markdown } from '../components/ui/Markdown'
 import { highlightPython } from '../lib/highlight'
 import { Visualizer } from '../components/teaching/Visualizer'
 import { ExerciseCard } from '../components/teaching/ExerciseCard'
+import { runPython } from '../lib/pyRunner'
 import type { JudgeResult, Question } from '../types'
 
 export function LessonDetail() {
@@ -65,7 +66,7 @@ export function LessonDetail() {
         {lesson.env === 'local' && (
           <div className="mt-4 flex items-start gap-2 rounded-xl border border-pyyellow/30 bg-pyyellow/[0.07] p-3 text-[13px] text-pyyellow/90">
             <AlertTriangle size={16} className="shrink-0 mt-0.5" />
-            <span>本课需要 <strong>Windows + VS Code 本地环境</strong>（文件 / Excel / PDF 等操作浏览器做不到），教程已在正文给出。</span>
+            <span>本课在 <strong>Windows + VS Code 本地环境</strong>完成（浏览器受安全限制做不到），完整步骤已在正文给出。</span>
           </div>
         )}
       </div>
@@ -97,6 +98,21 @@ export function LessonDetail() {
         </div>
       )}
 
+      {/* 术语大白话 */}
+      {lesson.terms && lesson.terms.length > 0 && (
+        <div className="surface p-4">
+          <div className="flex items-center gap-2 mb-3"><BookCopy size={18} className="text-pyblue-light" /><h3 className="section-title">术语翻译成大白话</h3></div>
+          <div className="space-y-2">
+            {lesson.terms.map((t, i) => (
+              <div key={i} className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-3 text-[13px] py-1.5 border-b border-white/[0.05] last:border-0">
+                <span className="font-mono text-pyblue-light shrink-0">{t.term}</span>
+                <span className="text-slate-300 leading-relaxed">{t.plain}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* 知识讲解 */}
       <div className="surface p-5">
         <div className="flex items-center gap-2 mb-2"><BookCopy size={18} className="text-pyblue-light" /><h3 className="section-title">知识讲解</h3></div>
@@ -116,22 +132,43 @@ export function LessonDetail() {
               <button onClick={() => runInLab(ex.code)} className="flex items-center gap-1 text-xs text-pyblue-light hover:text-pyblue"><FlaskConical size={14} />在实验室运行</button>
             </div>
             <div className="p-4">
+              {ex.intro && <p className="text-[13px] text-slate-400 leading-relaxed mb-3">{ex.intro}</p>}
               <pre className="rounded-xl bg-[#060b16] border border-white/[0.08] p-3.5 text-[12.5px] leading-6 overflow-x-auto m-0"><code className="font-mono text-slate-200">{highlightPython(ex.code)}</code></pre>
               {ex.expectedOutput && (
                 <div className="mt-3 rounded-xl bg-ok/[0.06] border border-ok/20 p-3">
-                  <div className="text-[11px] text-ok mb-1">预期输出</div>
+                  <div className="text-[11px] text-ok mb-1">运行结果</div>
                   <pre className="m-0 font-mono text-[12px] text-slate-300 whitespace-pre-wrap">{ex.expectedOutput}</pre>
                 </div>
               )}
               {ex.lines && ex.lines.length > 0 && (
                 <div className="mt-4 space-y-2">
-                  <div className="text-xs muted font-medium">逐行拆解</div>
+                  <div className="text-xs muted font-medium">逐行代码解析</div>
                   {ex.lines.map((ln, li) => (
                     <div key={li} className="flex gap-3 text-[13px]">
                       <code className="font-mono text-pyblue-light shrink-0 max-w-[45%] break-all">{ln.code}</code>
                       <span className="text-slate-400 leading-relaxed">→ {ln.explain}</span>
                     </div>
                   ))}
+                </div>
+              )}
+              {ex.trace && ex.trace.length > 0 && (
+                <div className="mt-4">
+                  <div className="text-xs muted font-medium mb-2">程序运行过程</div>
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-[12.5px]">
+                      <thead><tr><th className="text-left">步骤</th><th className="text-left">这一刻发生了什么</th></tr></thead>
+                      <tbody>
+                        {ex.trace.map((t, ti) => (
+                          <tr key={ti}><td className="text-pyblue-light whitespace-nowrap align-top">{t.step}</td><td className="text-slate-300">{t.state}</td></tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
+              {ex.tryIt && (
+                <div className="mt-3 rounded-xl bg-pyyellow/[0.06] border border-pyyellow/20 p-3 text-[12.5px] text-pyyellow/90">
+                  <span className="font-medium">动手改一改：</span>{ex.tryIt}
                 </div>
               )}
             </div>
@@ -167,12 +204,22 @@ export function LessonDetail() {
         </div>
       )}
 
+      {/* 本课小结 */}
+      {lesson.keyPoints && lesson.keyPoints.length > 0 && (
+        <div className="surface p-4 border-l-2 border-l-pyblue">
+          <div className="flex items-center gap-2 mb-3"><Check size={18} className="text-pyblue-light" /><h3 className="section-title">本课小结</h3></div>
+          <ul className="space-y-2">
+            {lesson.keyPoints.map((k, i) => <li key={i} className="flex gap-2 text-[13px] text-slate-300 leading-relaxed"><span className="text-pyblue-light shrink-0">{i + 1}.</span>{k}</li>)}
+          </ul>
+        </div>
+      )}
+
       {/* 动手练习（答案门控：只在提交后显示解析） */}
       <div className="space-y-3">
         <div className="flex items-center gap-2"><ListChecks size={18} className="text-ok" /><h3 className="section-title">动手练习</h3><span className="chip border-white/10 muted text-[10px]">先自己做，再看解析</span></div>
         {lesson.exercises.map((ex) => {
           const q = questionMap.get(ex.id) || ({ ...ex, lessonId: lesson.id, stageId: lesson.stageId, order: 1, knowledgePoint: lesson.title, difficulty: 1 } as Question)
-          return <ExerciseCard key={ex.id} question={q} onSubmit={handleAnswer} />
+          return <ExerciseCard key={ex.id} question={q} onSubmit={handleAnswer} runProgram={runPython} />
         })}
       </div>
 

@@ -5,6 +5,7 @@ import { questions, lessonMap } from '../data/courses'
 import { stages } from '../data/stages'
 import { useApp } from '../store/AppContext'
 import { ExerciseCard } from '../components/teaching/ExerciseCard'
+import { runPython } from '../lib/pyRunner'
 import { accuracyOf } from '../lib/grader'
 import type { Question, JudgeResult } from '../types'
 
@@ -73,7 +74,7 @@ export function Practice() {
                 <span className="text-xs muted">第 {current + 1} / {pool.length} 题 · {lessonMap.get(q.lessonId)?.title}</span>
                 <button onClick={() => navigate(`/lesson/${q.lessonId}`)} className="flex items-center gap-1 text-xs text-pyblue-light"><BookOpen size={13} />回看课程</button>
               </div>
-              <ExerciseCard key={q.id} question={q} onSubmit={submit} />
+              <ExerciseCard key={q.id} question={q} onSubmit={submit} runProgram={runPython} />
               <div className="flex gap-2">
                 <button className="btn-ghost flex-1 py-2.5" onClick={() => setCurrent((c) => (c - 1 + pool.length) % pool.length)}>上一题</button>
                 <button className="btn-ghost flex-1 py-2.5" onClick={() => setCurrent((c) => (c + 1) % pool.length)}>下一题</button>
@@ -103,7 +104,7 @@ export function Practice() {
                       <span className="chip border-danger/30 text-danger text-[10px]">错 {w.wrongCount} 次</span>
                       <span className="text-[11px] muted">{lessonMap.get(question.lessonId)?.title}</span>
                     </div>
-                    <ExerciseCard key={`${w.questionId}-${i}`} question={question} onSubmit={submit} />
+                    <ExerciseCard key={`${w.questionId}-${i}`} question={question} onSubmit={submit} runProgram={runPython} />
                   </div>
                 )
               })}

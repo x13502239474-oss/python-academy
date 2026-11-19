@@ -61,6 +61,28 @@ describe('编程题测试用例判分', () => {
   it('未运行', () => expect(judge(q, '').correct).toBe(false))
 })
 
+describe('无论对错都给出详细解析', () => {
+  const q: Question = {
+    ...base,
+    qtype: 'single',
+    stem: '选B',
+    answer: 'B',
+    options: ['A', 'B'],
+    explanation: '答案：B。\n思路：因为 B 才是对的。',
+  }
+  it('答对也带解析', () => {
+    const r = judge(q, 'B')
+    expect(r.correct).toBe(true)
+    expect(r.feedback).toContain('思路')
+  })
+  it('答错给出正确答案 + 解析', () => {
+    const r = judge(q, 'A')
+    expect(r.correct).toBe(false)
+    expect(r.feedback).toContain('正确答案是 B')
+    expect(r.feedback).toContain('思路')
+  })
+})
+
 describe('正确率统计', () => {
   it('计算百分比', () => expect(accuracyOf([{ correct: true }, { correct: false }, { correct: true }])).toBe(67))
   it('空数组', () => expect(accuracyOf([])).toBe(0))

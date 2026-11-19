@@ -7,6 +7,7 @@ import { stage5Lessons } from './s5'
 import { stage6Lessons } from './s6'
 import { stage7Lessons } from './s7'
 import { stage8Lessons } from './s8'
+import { stage9Lessons } from './s9'
 
 /** 全部课程，按阶段、序号排列 */
 export const lessons: Lesson[] = [
@@ -18,6 +19,7 @@ export const lessons: Lesson[] = [
   ...stage6Lessons,
   ...stage7Lessons,
   ...stage8Lessons,
+  ...stage9Lessons,
 ]
 
 export const lessonMap = new Map(lessons.map((l) => [l.id, l]))

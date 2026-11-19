@@ -110,7 +110,7 @@ export function ExerciseCard({ question: q, onSubmit, runProgram }: Props) {
           </div>
           {programOut && <pre className="mt-2 text-[11px] text-slate-400 whitespace-pre-wrap font-mono">输出：{programOut.trim()}</pre>}
           <button onClick={() => setShowDetail((s) => !s)} className="mt-2 flex items-center gap-1.5 text-xs text-pyblue-light"><Lightbulb size={14} />{showDetail ? '收起解析' : '查看解析'}</button>
-          {showDetail && <p className="mt-2 text-[13px] text-slate-300 leading-relaxed">{result.feedback}</p>}
+          {showDetail && <p className="mt-2 text-[13px] text-slate-300 leading-relaxed whitespace-pre-wrap">{result.feedback}</p>}
           {!result.correct && (
             <button onClick={() => { setResult(null); setAnswer(''); setMulti([]); setProgramOut('') }} className="mt-3 flex items-center gap-1.5 text-xs muted hover:text-slate-200"><RotateCcw size={13} />再试一次</button>
           )}

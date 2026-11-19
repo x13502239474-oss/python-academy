@@ -26,7 +26,7 @@ export function Courses() {
     <div className="space-y-5 animate-fade-up">
       <div>
         <h1 className="text-2xl font-bold">课程体系</h1>
-        <p className="muted text-sm mt-1">八阶段循序渐进 · {lessons.length} 节课 · 已完成 {totalDone} 节</p>
+        <p className="muted text-sm mt-1">九阶段循序渐进 · {lessons.length} 节课 · 已完成 {totalDone} 节</p>
       </div>
 
       <div className="space-y-3">

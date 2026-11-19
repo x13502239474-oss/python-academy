@@ -1,10 +1,10 @@
 import {
-  Rocket, Boxes, GitBranch, FunctionSquare, Box, Workflow,
-  ChartNoAxesCombined, Trophy, type LucideIcon,
+  Rocket, Boxes, Layers, GitBranch, FunctionSquare, FileCode2, Box,
+  Sparkles, Trophy, type LucideIcon,
 } from 'lucide-react'
 
 const map: Record<string, LucideIcon> = {
-  Rocket, Boxes, GitBranch, FunctionSquare, Box, Workflow, ChartNoAxesCombined, Trophy,
+  Rocket, Boxes, Layers, GitBranch, FunctionSquare, FileCode2, Box, Sparkles, Trophy,
 }
 
 export function StageIcon({ name, size = 22, className }: { name: string; size?: number; className?: string }) {
